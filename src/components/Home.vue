@@ -76,27 +76,27 @@ export default {
         name: 'Kate',
         type: 'received',
         text: 'Hi, I am good!',
-        avatar: 'http://lorempixel.com/100/100/people/9'
+        avatar: 'https://picsum.photos/800/450'
       }]
     }
   },
   methods: {
     submitChat () {
-      const self = this;
-      const text = self.messagebar.getValue().replace(/\n/g, '<br>').trim();
+      const self = this
+      const text = self.messagebar.getValue().replace(/\n/g, '<br>').trim()
 
       if (text.length === 0) {
         // exit when empty messagebar text is empty
         return
       }
 
-        // Clear messagebar area
+      // Clear messagebar area
       self.messagebar.clear()
 
-        // Focus area
+      // Focus area
       if (text.length) self.messagebar.focus()
 
-        // Add sent message
+      // Add sent message
       self.messagesData.push({
         text
       })
