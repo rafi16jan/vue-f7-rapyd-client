@@ -6,72 +6,39 @@
 
     <f7-view url='/' main>
       <!-- Initial Page -->
-      <f7-page>
-        <!-- Top Navbar-->
-        <f7-navbar>
-          <f7-nav-left>
-            <f7-link panel-open="left" v-on:panel:open="onLeftPanelOpen">
-              <f7-icon if-ios="ion:ios-menu" if-md="ion:md-menu"></f7-icon>
-            </f7-link>
-          </f7-nav-left>
-          <f7-nav-title>Home</f7-nav-title>
-        </f7-navbar>
-        <!-- Page Content -->
-        <f7-block>Page content goes here</f7-block>
-        <!-- <f7-link href="/about/">About App</f7-link> -->
-      </f7-page>
+      <main-app />
     </f7-view>
 
-    <f7-panel url='/panel/' left cover :opened="panelOpened">
-      <f7-view>
-        <f7-page>
-          <f7-navbar title="Left Panel"></f7-navbar>
-          <f7-block>
-            <p>Here comes the left panel text</p>
-          </f7-block>
-        </f7-page>
-      </f7-view>
-    </f7-panel>
+    <app-panel />
+
   </f7-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-
 import {
   f7App,
   f7Statusbar,
-  f7View,
-  f7Page,
-  f7Navbar,
-  f7NavLeft,
-  f7NavTitle,
-  f7Toolbar,
-  f7Link,
-  f7Panel,
-  f7Block,
-  f7Icon
+  f7View
 } from 'framework7-vue'
+
+import HelloWorld from './components/HelloWorld'
+import AppPanel from './components/Panel'
+import MainApp from './components/Home'
 
 import routes from './routes'
 import packageJson from '../package.json'
+
+import API from '@/api'
 
 export default {
   name: 'App',
   components: {
     f7App,
     HelloWorld,
+    AppPanel,
     f7Statusbar,
     f7View,
-    f7Page,
-    f7Navbar,
-    f7NavLeft,
-    f7NavTitle,
-    f7Toolbar,
-    f7Link,
-    f7Panel,
-    f7Block,
-    f7Icon
+    MainApp
   },
   data () {
     let { version } = packageJson
@@ -93,6 +60,15 @@ export default {
   methods: {
     onLeftPanelOpen () {
       console.log(this.$f7)
+    }
+  },
+  async mounted () {
+    try {
+      // console.log(API)
+      let response = await API.post('/search')
+      console.log(response)
+    } catch (error) {
+      console.error(error)
     }
   }
 }

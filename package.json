@@ -15,19 +15,26 @@
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
+    "@babel/runtime": "^7.0.0",
     "@material/card": "^0.39.1",
     "@material/grid-list": "^0.39.1",
     "@material/theme": "^0.39.1",
     "@vue/babel-plugin-transform-vue-jsx": "^0.1.0",
     "@vuex-orm/core": "^0.26.1",
+    "axios": "^0.18.0",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "framework7": "^3.2.1",
     "framework7-icons": "^0.9.1",
     "framework7-vue": "^3.2.1",
     "ionicons": "^4.4.3",
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.2",
     "postcss-safe-parser": "^4.0.1",
-    "vue": "^2.5.17"
+    "vue": "^2.5.17",
+    "vue-socket.io": "^2.1.1-b",
+    "vuetify": "^1.2.3",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
