@@ -1,7 +1,7 @@
 import { create } from 'axios'
 
 const API = create({
-  baseURL: 'http://localhost:8069/api'
+  baseURL: 'https://rihla.duckdns.org:8069/api'
 })
 
 export default API
