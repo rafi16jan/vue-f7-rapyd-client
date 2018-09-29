@@ -16,7 +16,7 @@ export default {
     f7Navbar
   },
   mounted () {
-      console.log(this.$f7)
+    console.log(this.$f7)
   }
 }
 </script>

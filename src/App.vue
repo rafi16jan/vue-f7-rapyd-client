@@ -9,7 +9,7 @@
       <main-app />
     </f7-view>
 
-    <app-panel />
+    <!-- <app-panel v-show="false" /> -->
 
   </f7-app>
 </template>
@@ -20,15 +20,14 @@ import {
   f7Statusbar,
   f7View
 } from 'framework7-vue'
+import { mapGetters } from 'vuex'
 
 import HelloWorld from './components/HelloWorld'
 import AppPanel from './components/Panel'
-import MainApp from './components/Home'
+import MainApp from './components/Loading'
 
 import routes from './routes'
 import packageJson from '../package.json'
-
-import API from '@/api'
 
 export default {
   name: 'App',
@@ -52,23 +51,21 @@ export default {
         panel: {
           swipe: 'left',
           leftBreakpoint: 768
+          // leftBreakpoint: this.checkAvailableUser ? 768 : 0
         },
         theme: 'auto'
-      }
+      },
+      ...mapGetters([
+        'checkAvailableUser'
+      ])
     }
   },
   methods: {
     onLeftPanelOpen () {
       console.log(this.$f7)
-    }
-  },
-  async mounted () {
-    try {
-      // console.log(API)
-      let response = await API.post('/search')
-      console.log(response)
-    } catch (error) {
-      console.error(error)
+    },
+    isAuthorized () {
+      return false
     }
   }
 }

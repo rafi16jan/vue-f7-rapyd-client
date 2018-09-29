@@ -2,11 +2,15 @@
     <f7-page>
         <!-- Top Navbar-->
         <f7-navbar>
-          <f7-nav-left>
-            <f7-link panel-open="left">
+          <!-- <f7-nav-left>
+            <f7-link
+              :panel-open="panelOpened"
+              :panel-close="!panelOpened"
+              @click="homeButtonClicked"
+            >
               <f7-icon if-ios="ion:ios-menu" if-md="ion:md-menu"></f7-icon>
             </f7-link>
-          </f7-nav-left>
+          </f7-nav-left> -->
           <f7-nav-title>Home</f7-nav-title>
         </f7-navbar>
         <f7-messagebar
@@ -15,7 +19,7 @@
             @change='onChange'
             resizable
             :value='chatText'
-            @send='submitChat'
+            @submit='submitChat'
             send-link='Send'
         />
         <f7-messages ref="messages">
@@ -65,6 +69,7 @@ export default {
   },
   data () {
     return {
+      panelOpened: document.querySelector('.framework7-root').offsetWidth >= 768,
       chatText: '',
       messagesData: [{
         type: 'sent',
@@ -80,7 +85,25 @@ export default {
       }]
     }
   },
+  async mounted () {
+    try {
+      // console.log(API)
+      await this.$store.dispatch('SEARCH')
+      this.$f7router.navigate({ name: 'panel' })
+      const self = this
+      self.$f7ready(() => {
+        self.messagebar = self.$refs.messagebar.f7Messagebar
+        self.messages = self.$refs.messages.f7Messages
+      })
+    } catch (error) {
+      console.error('error: ', (error))
+      this.$f7router.navigate({ name: 'login' }, { reloadAll: true })
+    }
+  },
   methods: {
+    isTabletOrDesktop () {
+      return document.querySelector('.framework7-root').offsetWidth >= 768
+    },
     submitChat () {
       const self = this
       const text = self.messagebar.getValue().replace(/\n/g, '<br>').trim()
@@ -100,6 +123,10 @@ export default {
       self.messagesData.push({
         text
       })
+    },
+    homeButtonClicked () {
+      console.log('panel clicked!!!')
+      this.panelOpened = !this.panelOpened
     },
     onChange (text) {
       console.log('changed')
@@ -124,11 +151,6 @@ export default {
       if (message.isTitle) return false
       if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true
       return false
-    },
-    onF7Ready () {
-      const self = this
-      self.messagebar = self.$refs.messagebar.f7Messagebar
-      self.messages = self.$refs.messages.f7Messages
     }
   }
 }

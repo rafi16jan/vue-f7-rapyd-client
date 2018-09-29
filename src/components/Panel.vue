@@ -1,13 +1,14 @@
 <template>
-    <f7-panel url='/panel/' left cover :opened="panelOpened">
+    <!-- <f7-panel url='/panel/' left cover :opened="panelOpened"> -->
+    <f7-panel left cover>
       <f7-view>
         <f7-page>
-          <f7-navbar title="Left Panel"></f7-navbar>
+          <f7-navbar title="Menu"></f7-navbar>
           <f7-list>
               <f7-list-item
                 view='.view-main'
-                v-for='(menu, index) in panelMenus'
-                :key='`panel-${index}`'
+                v-for='menu in panelMenus'
+                :key='`panel-item-${menu.title}`'
                 :title='menu.title'
                 :link='menu.link'
                 panel-close />
@@ -18,6 +19,13 @@
                             title='Users'
                             link='/settings/'
                             view='.view-main'
+                            panel-close
+                        />
+                        <f7-list-item
+                            title='Logout'
+                            link='/'
+                            view='.view-main'
+                            @click="doLogout"
                             panel-close
                         />
                     </f7-list>
@@ -47,6 +55,7 @@ import {
   f7AccordionToggle,
   f7AccordionContent
 } from 'framework7-vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -66,11 +75,30 @@ export default {
       panelMenus: [{
         title: 'Contacts',
         link: '/contacts/'
-        // }, {
-        //      title: 'Settings',
-        //      link: '/settings/'
+      // }, {
+      //   title: 'Login',
+      //   link: '/login/'
       }],
-      panelOpened: false
+      ...mapGetters([
+        'checkAvailableUser'
+      ])
+    }
+  },
+  methods: {
+    async doLogout () {
+      this.$f7.dialog.preloader()
+      try {
+        await this.$store.dispatch('LOGOUT')
+        const { default: removePanelElement } = await import('../utils/remove-elements/panel')
+        removePanelElement()
+        this.$f7router.navigate({ name: 'index' }, { reloadAll: true })
+        this.$f7.dialog.alert('You are logged out', () => {
+          this.$f7.dialog.close()
+        })
+      } catch (e) {
+        console.log(e)
+        this.$f7.dialog.close()
+      }
     }
   }
 }
