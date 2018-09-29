@@ -8,8 +8,12 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserWebpackPlugin = require('terser-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
+const WebpackPwaManifest = require('webpack-pwa-manifest')
+const WorkboxPlugin = require('workbox-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const BabelMinifyWebpackPlugin = require('babel-minify-webpack-plugin')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -46,21 +50,35 @@ const webpackConfig = merge(baseWebpackConfig, {
           enforce: true
         }
       }
-    }
+    },
+    minimizer: [
+      // new BabelMinifyWebpackPlugin({
+      //   keepFnName: true,
+      //   keepClassName: true,
+      //   removeConsole: true
+      // }, {
+      //   mangle: {
+      //     topLevel: true
+      //   },
+      //   comments: false,
+      //   sourceMap: false,
+      // }),
+      new TerserWebpackPlugin({
+        terserOptions: {
+          compress: {
+            warnings: false
+          }
+        },
+        sourceMap: config.build.productionSourceMap,
+        parallel: true,
+        cache: true
+      })
+    ]
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env
-    }),
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        compress: {
-          warnings: false
-        }
-      },
-      sourceMap: config.build.productionSourceMap,
-      parallel: true
     }),
     // extract css into its own file
     new MiniCssExtractPlugin({
@@ -98,6 +116,23 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
+    }),
+    new WebpackPwaManifest({
+      name: "Framework7 Vue Rapyd Client",
+      short_name: "F7 Vue",
+      description: "Rapyd Client with Framework7 and Vue",
+      start_url: "/?utm_source=pwa",
+      icons: [{
+        src: path.resolve('./src/assets/icon512.png'),
+        "sizes": [144, 192, 512]
+      }],
+      theme_color: "#3f51b5",
+      background_color: "#ffffff",
+      display: "standalone"
+    }),
+    new CompressionPlugin({
+      test: /\.(js|css)/,
+      cache: true
     }),
     // keep module.id stable when vendor modules does not change
     // new webpack.HashedModuleIdsPlugin(),
@@ -140,31 +175,28 @@ const webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       }
-    ])
-  ]
-})
-
-if (config.build.productionGzip) {
-  const CompressionWebpackPlugin = require('compression-webpack-plugin')
-
-  webpackConfig.plugins.push(
-    new CompressionWebpackPlugin({
-      asset: '[path].gz[query]',
-      algorithm: 'gzip',
-      test: new RegExp(
-        '\\.(' +
-        config.build.productionGzipExtensions.join('|') +
-        ')$'
-      ),
-      threshold: 10240,
-      minRatio: 0.8
+    ]),
+    new WorkboxPlugin.GenerateSW({
+      importWorkboxFrom: 'local',
+      clientsClaim: true,
+      skipWaiting: true,
+      include: [
+        /\.html$/,
+        /\.js$/,
+        /\.css$/,
+        /\.woff$/,
+        /\.woff2$/,
+        /\.json$/,
+        /\.webmanifest$/,
+        /\.gz$/
+      ]
+    }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      reportFilename: '../report.html'
     })
-  )
-}
+  ]
 
-if (config.build.bundleAnalyzerReport) {
-  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-  webpackConfig.plugins.push(new BundleAnalyzerPlugin())
-}
+})
 
 module.exports = webpackConfig
