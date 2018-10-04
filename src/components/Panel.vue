@@ -8,29 +8,35 @@
               <f7-list-item
                 view='.view-main'
                 v-for='menu in panelMenus'
-                :key='`panel-item-${menu.title}`'
-                :title='menu.title'
-                :link='menu.link'
-                panel-close />
-            <f7-list-item accordion-item title='Settings'>
-                <f7-accordion-content>
+                :key='`panel-item-${menu.id}`'
+                :title='menu.string'
+                :link='`/${menu.id}/`'
+                :accordion-item='getMenuChild(menu)'
+                panel-close>
+                  <f7-accordion-content
+                    :v-if="getMenuChild(menu)"
+                  >
                     <f7-list>
-                        <f7-list-item
-                            title='Users'
-                            link='/settings/'
-                            view='.view-main'
-                            panel-close
-                        />
-                        <f7-list-item
-                            title='Logout'
-                            link='/'
-                            view='.view-main'
-                            @click="doLogout"
-                            panel-close
-                        />
+                      <f7-list-item
+                        view='.view-main'
+                        v-for='childMenu in menu.childs'
+                        :key='`panel-child-item-${childMenu.id}`'
+                        :title='childMenu.string'
+                        :link='`/${childMenu.id}/`'
+                        panel-close
+                      />
+                      <f7-list-item
+                        v-if="menu.id == 'settings'"
+                        :link='true'
+                        :href='false'
+                        title='Logout'
+                        view='.view-main'
+                        @click="doLogout"
+                        panel-close
+                      />
                     </f7-list>
-                </f7-accordion-content>
-            </f7-list-item>
+                  </f7-accordion-content>
+              </f7-list-item>
           </f7-list>
           <!-- <f7-list accordion>
           </f7-list> -->
@@ -72,28 +78,46 @@ export default {
   },
   data () {
     return {
-      panelMenus: [{
-        title: 'Contacts',
-        link: '/contacts/'
-      // }, {
-      //   title: 'Login',
-      //   link: '/login/'
-      }],
+      // panelMenus: [{
+      //   title: 'Contacts',
+      //   link: '/contacts/'
+      // }],
+      panelMenus: [],
       ...mapGetters([
-        'checkAvailableUser'
+        'checkAvailableUser',
+        'checkClientJS'
       ])
     }
   },
+  mounted () {
+    try {
+      let { tools } = this.$createORM(this.checkClientJS())
+      // sort panel menu sequence using rapydscript syntax
+      let menus = tools.keys(tools.menu, 'sequence').as_array()
+      this.panelMenus = menus.map(key => tools.menu[key])
+    } catch (error) {
+      console.log(error)
+    }
+  },
   methods: {
+    getMenuChild (menu) {
+      return menu.childs.length > 0
+    },
     async doLogout () {
       this.$f7.dialog.preloader()
       try {
         await this.$store.dispatch('LOGOUT')
         const { default: removePanelElement } = await import('../utils/remove-elements/panel')
         removePanelElement()
+        this.$f7.dialog.close()
         this.$f7router.navigate({ name: 'index' }, { reloadAll: true })
+        // this.$f7.panel.left.destroy()
+        console.log('toast: ', this.$f7.toast)
+        console.log('loggedOut panel: ', this.$f7.panel)
+        // this.logoutToast.open()
         this.$f7.dialog.alert('You are logged out', () => {
           this.$f7.dialog.close()
+          this.$f7.panel.disableSwipe('left')
         })
       } catch (e) {
         console.log(e)

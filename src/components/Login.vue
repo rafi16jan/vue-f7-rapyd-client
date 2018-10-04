@@ -25,6 +25,8 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
@@ -36,10 +38,15 @@ export default {
   },
   mounted () {
     let userData = this.$store.getters.getUser
-    console.log('userData: ', userData)
-    if (userData && userData.login) {
+    if (userData?.login) {
       this.$f7router.navigate({ name: 'index' }, { reloadAll: true })
+      this.$createORM(this.checkClientJS)
     }
+  },
+  computed: {
+    ...mapGetters([
+      'checkClientJS'
+    ])
   },
   methods: {
     async signIn () {

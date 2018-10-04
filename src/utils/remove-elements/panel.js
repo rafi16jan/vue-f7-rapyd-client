@@ -1,19 +1,12 @@
 /**
  * function to remove panel element when logout
- *
+ * it will hide .panel element
+ * then set .view.view-main margin-left style to 0 if user use tablet/notebook
+ * otherwise it will set hide .panel-backdrop element
  * @export
  */
 export default function removePanelElement () {
-  /**
-   * destroy panel after logout
-   * Maybe I can use document.querySelector('.panel.panel-left').remove()
-   * but according to https://www.w3schools.com/js/js_htmldom_css.asp
-   * .remove() function is not working at any versions of IE
-   */
-  let panelElement = document.querySelector('.framework7-modals .panel')
-  panelElement.parentNode.removeChild(panelElement)
-  /**
-   * then I set margin-left style value of .view-main to 0
-   */
+  document.querySelector('.panel').style.display = 'none'
   document.querySelector('.view.view-main').style.marginLeft = 0
+  document.querySelector('.panel-backdrop').style.display = 'none'
 }

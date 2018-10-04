@@ -1,5 +1,7 @@
 import { stringify } from 'querystring'
 
+import createORMFunction from '@/utils/create-orm-function'
+
 import API from '@/api'
 
 const LOGIN = 'LOGIN'
@@ -20,7 +22,10 @@ const app = {
       } : { }
     },
     checkAvailableUser ({ data }) {
-      return !!(data && data.login)
+      return (!!data?.login) || false
+    },
+    checkClientJS ({ data }) {
+      return data.client_js
     }
   },
   mutations: {
@@ -28,7 +33,7 @@ const app = {
       console.log('state: ', state)
       console.log('LOGIN response data: ', data)
       state.data = data
-      console.log(data.client_js)
+      // createORMFunction(data.client_js)
     },
     [`${LOGIN}_REJECTED`] (state, error) {
       console.log('state: ', state)

@@ -53,6 +53,7 @@ import {
   f7MessagesTitle,
   f7Message
 } from 'framework7-vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -85,13 +86,28 @@ export default {
       }]
     }
   },
+  computed: {
+    ...mapGetters([
+      'checkClientJS'
+    ])
+  },
   async mounted () {
     try {
       // console.log(API)
       await this.$store.dispatch('SEARCH')
-      this.$f7router.navigate({ name: 'panel' })
+      let { models } = this.$createORM(this.checkClientJS)
+      console.log(models)
       const self = this
       self.$f7ready(() => {
+        // self.$f7.panel.create({ side: 'left', effect: 'reveal' })
+        console.log('loggedIn panel: ', self.$f7.panel)
+        if (!self.$f7.panel.left) self.$f7router.navigate({ name: 'panel' })
+        self.$f7.panel.enableSwipe('left')
+        // document.querySelector('.panel-backdrop').style.display = 'block'
+        if (this.isTabletOrDesktop()) {
+          document.querySelector('.panel').style.display = 'block'
+          document.querySelector('.view.view-main').style.marginLeft = '260px'
+        }
         self.messagebar = self.$refs.messagebar.f7Messagebar
         self.messages = self.$refs.messages.f7Messages
       })

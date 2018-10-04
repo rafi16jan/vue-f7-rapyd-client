@@ -13,6 +13,8 @@ import VueSocketIo from 'vue-socket.io'
 
 import initStore from './vuex/plugin'
 
+import VueSoluORM from './plugins/solu-orm-vue'
+
 // import './assets/styles/app.less'
 import 'framework7/css/framework7.min.css'
 import 'ionicons/dist/css/ionicons.min.css'
@@ -35,6 +37,7 @@ Vue.config.productionTip = false
 Framework7.use(Framework7Vue)
 Vue.use(VueSocketIo, 'https://rihla.duckdns.org:8069')
 Vue.use(VueFragment)
+Vue.use(VueSoluORM)
 
 /* eslint-disable no-new */
 new Vue({
