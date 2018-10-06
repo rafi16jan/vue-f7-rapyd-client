@@ -15,6 +15,8 @@ const WorkboxPlugin = require('workbox-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const BabelMinifyWebpackPlugin = require('babel-minify-webpack-plugin')
 const AppCacheWebpackPlugin = require('appcache-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const zopfli = require('@gfx/zopfli')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -34,7 +36,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    chunkFilename: utils.assetsPath('js/[name].[chunkhash].js')
   },
   optimization: {
     splitChunks: {
@@ -53,30 +55,36 @@ const webpackConfig = merge(baseWebpackConfig, {
       }
     },
     minimizer: [
-      // new BabelMinifyWebpackPlugin({
-      //   keepFnName: true,
-      //   keepClassName: true,
-      //   removeConsole: true
-      // }, {
-      //   mangle: {
-      //     topLevel: true
-      //   },
-      //   comments: false,
-      //   sourceMap: false,
-      // }),
-      new TerserWebpackPlugin({
-        terserOptions: {
-          compress: {
-            warnings: false
-          }
+      new BabelMinifyWebpackPlugin({
+        keepFnName: true,
+        keepClassName: true,
+        removeConsole: true
+      }, {
+        mangle: {
+          topLevel: true
         },
-        sourceMap: config.build.productionSourceMap,
-        parallel: true,
-        cache: true
-      })
+        comments: false,
+        sourceMap: false,
+      }),
+      // new TerserWebpackPlugin({
+      //   terserOptions: {
+      //     compress: {
+      //       warnings: false
+      //     }
+      //   },
+      //   // sourceMap: config.build.productionSourceMap,
+      //   parallel: true,
+      //   cache: true
+      // })
     ]
   },
   plugins: [
+    new CleanWebpackPlugin([
+      path.resolve(__dirname, '../dist')
+    ], {
+      root: path.resolve(__dirname, '..'),
+      verbose: true
+    }),
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env
@@ -138,7 +146,13 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new CompressionPlugin({
       test: /\.(js|css)/,
-      cache: true
+      cache: true,
+      compressionOptions: {
+        numiterations: 15
+      },
+      algorithm(input, compressionOptions, callback) {
+        return zopfli.gzip(input, compressionOptions, callback);
+      }
     }),
 
     // copy custom static assets

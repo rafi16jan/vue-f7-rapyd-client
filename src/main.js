@@ -4,7 +4,6 @@ import Vue from 'vue'
 
 import Framework7 from 'framework7/framework7.esm.bundle'
 import Framework7Vue from 'framework7-vue/framework7-vue.esm.bundle'
-import VueFragment from 'vue-fragments'
 
 import App from './App.vue'
 
@@ -36,7 +35,6 @@ Vue.config.productionTip = false
 
 Framework7.use(Framework7Vue)
 Vue.use(VueSocketIo, 'https://rihla.duckdns.org:8069')
-Vue.use(VueFragment)
 Vue.use(VueSoluORM)
 
 /* eslint-disable no-new */

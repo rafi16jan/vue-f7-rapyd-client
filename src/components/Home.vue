@@ -88,14 +88,14 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getAppData',
       'checkClientJS'
     ])
   },
   async mounted () {
     try {
-      // console.log(API)
       await this.$store.dispatch('SEARCH')
-      let { models } = this.$createORM(this.checkClientJS)
+      let { models } = await this.$createORM(this.getAppData, this.checkClientJS)
       console.log(models)
       const self = this
       self.$f7ready(() => {

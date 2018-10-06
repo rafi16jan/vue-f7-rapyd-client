@@ -1,7 +1,5 @@
 import { stringify } from 'querystring'
 
-import createORMFunction from '@/utils/create-orm-function'
-
 import API from '@/api'
 
 const LOGIN = 'LOGIN'
@@ -20,6 +18,15 @@ const app = {
         login,
         password
       } : { }
+    },
+    getAppData ({ data }) {
+      let {
+        client_js, // eslint-disable-line camelcase
+        status,
+        client_js_time, // eslint-disable-line camelcase
+        ...otherData
+      } = data
+      return otherData
     },
     checkAvailableUser ({ data }) {
       return (!!data?.login) || false

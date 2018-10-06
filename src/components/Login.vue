@@ -36,16 +36,17 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
     let userData = this.$store.getters.getUser
     if (userData?.login) {
       this.$f7router.navigate({ name: 'index' }, { reloadAll: true })
-      this.$createORM(this.checkClientJS)
+      await this.$createORM(this.getAppData, this.checkClientJS)
     }
   },
   computed: {
     ...mapGetters([
-      'checkClientJS'
+      'checkClientJS',
+      'getAppData'
     ])
   },
   methods: {
