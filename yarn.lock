@@ -945,10 +945,10 @@
     source-map "^0.5.6"
     vue-template-es2015-compiler "^1.6.0"
 
-"@vuex-orm/core@^0.26.2":
-  version "0.26.2"
-  resolved "https://registry.yarnpkg.com/@vuex-orm/core/-/core-0.26.2.tgz#f93c49499b4050117d8b05a20e9239fb94388c44"
-  integrity sha512-aRRZlJZ0LcAOem9ppUAj2zHYqsxqAMDNg5Eo6fwvObhz05D6ttc3uT/ngYP/4rG/0bmzpfw/pBlMbebnxPUT+Q==
+"@vuex-orm/core@^0.26.4":
+  version "0.26.4"
+  resolved "https://registry.yarnpkg.com/@vuex-orm/core/-/core-0.26.4.tgz#02b4454fc5a71f24c7f81ec9315329695a74bf2a"
+  integrity sha512-CgLbaTFypLfdW4K4PAALCENYAaEWSErP03zDQdy3cIq28vO/j3gC4f/PkaKMCp0L7OthrCVoEK6RrkCQiJJBcA==
 
 "@webassemblyjs/ast@1.7.8":
   version "1.7.8"
@@ -10715,10 +10715,10 @@ vuetify@^1.2.6:
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.2.6.tgz#e94e4b169544b326eabf08636006968c37e98f28"
   integrity sha512-/5xFgawE1GBVDrMiTJf5P1+YP4mMAg/xni+2M2btwJI8842EWD0+DKC12icuPTrzWdnc8+hXqoubi4+qYz6SSg==
 
-vuex-persist@^1.7.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/vuex-persist/-/vuex-persist-1.7.1.tgz#050b271730d0ffdb9d4a39da8f448053aa941ab8"
-  integrity sha512-UlNCvWA2Rh7H7qbMcHQ3NIGuhVcsL6ot2b1SVCmkWYRONA1g7JxSQZMVIgV7cdxsSJquf35HdBiAZGz5dl6YSA==
+vuex-persist@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/vuex-persist/-/vuex-persist-1.7.2.tgz#11426036e7886b5ad79ecc565130ee599bdefb5d"
+  integrity sha512-0FTJ7TvolkzQYaz+LtvxEHUWQMYXd7eWhdPZQq2Iq1fnROQjPiIUBINMFWqo6crIJAZHeKSHSO18rOk81zYpWg==
   dependencies:
     circular-json "^0.5.5"
     lodash.merge "^4.6.1"
