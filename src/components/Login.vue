@@ -40,7 +40,7 @@ export default {
     let userData = this.$store.getters.getUser
     if (userData?.login) {
       this.$f7router.navigate({ name: 'index' }, { reloadAll: true })
-      await this.$createORM(this.getAppData, this.checkClientJS)
+      this.$createORM(this.getAppData, this.checkClientJS)
     }
   },
   computed: {

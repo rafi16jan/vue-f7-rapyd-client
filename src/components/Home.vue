@@ -95,8 +95,7 @@ export default {
   async mounted () {
     try {
       await this.$store.dispatch('SEARCH')
-      let { models } = await this.$createORM(this.getAppData, this.checkClientJS)
-      console.log(models)
+      this.$createORM(this.getAppData, this.checkClientJS)
       const self = this
       self.$f7ready(() => {
         // self.$f7.panel.create({ side: 'left', effect: 'reveal' })

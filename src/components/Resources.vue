@@ -19,7 +19,7 @@ import PartnerLists from './pages/partner-lists.vue'
 
 import { mapGetters } from 'vuex'
 
-import searchResourceData from '@/api/requests/search'
+import { generateValues } from '@/utils/create-orm-function'
 
 export default {
   props: [ 'menu' ],
@@ -39,12 +39,13 @@ export default {
   async mounted () {
     this.loading = true
     try {
-      let { models, tools } = await this.$createORM(this.getAppData, this.checkClientJS)
-      console.log('models: ', models)
-      console.log('model name: ', this.menu.model)
-      console.log('tools: ', tools)
-      // let response = await models.env[this.menu.model].search
-      this.resourceValues = await searchResourceData(this.menu.model, this.getAppData)
+      // let { models, tools } = await this.$createORM(this.getAppData, this.checkClientJS)
+      // console.log('models: ', models)
+      // console.log('model name: ', this.menu.model)
+      // console.log('tools: ', tools)
+      let response = await models.env[this.menu.model].search()
+      this.resourceValues = generateValues(response)
+      // this.resourceValues = await searchResourceData(this.menu.model, this.getAppData)
       console.log('response: ', this.resourceValues)
       this.loading = false
     } catch (error) {

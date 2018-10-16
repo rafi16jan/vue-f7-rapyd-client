@@ -97,7 +97,7 @@ export default {
   },
   async mounted () {
     try {
-      let { tools } = await this.$createORM(this.getAppData, this.checkClientJS)
+      // let { tools } = await this.$createORM(this.getAppData, this.checkClientJS)
       // sort panel menu sequence using rapydscript syntax
       let menus = tools.keys(tools.menu, 'sequence').as_array()
       this.panelMenus = menus.map(key => tools.menu[key])
