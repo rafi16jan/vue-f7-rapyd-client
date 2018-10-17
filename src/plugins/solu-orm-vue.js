@@ -18,7 +18,6 @@ const soluORMPlugin = {
         force_upload: false
       }
       tools.configuration.url = url
-      
       // return new Promise((resolve, reject) => {
       //   try {
       //     (new Function(client_js))() // eslint-disable-line no-new-func
