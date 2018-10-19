@@ -1,6 +1,11 @@
-import PouchDB from 'pouchdb-browser'
+import PouchDB from 'pouchdb'
+import relationalPouch from 'relational-pouch'
+import pouchDBfind from 'pouchdb-find'
 
 import { baseURL as url } from '@/api'
+
+PouchDB.plugin(relationalPouch)
+PouchDB.plugin(pouchDBfind)
 
 window.PouchDB = PouchDB
 
