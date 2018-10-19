@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody v-if="getContactSize">
-              <tr v-for="contact in contacts" :key='contact.id'>
+              <tr v-for="contact in contacts" :key="contact.id" @click="onItemClicked">
                 <!-- <td class="checkbox-cell">
                   <label class="checkbox">
                     <input type="checkbox" @change="getContactId" :data-id='contact.id' />
@@ -94,6 +94,10 @@
 
 .card-header {
   min-height: 120px;
+}
+
+.data-table tbody tr:hover {
+  cursor: pointer;
 }
 
 .card-header .data-table-title .button {
@@ -169,6 +173,9 @@ export default {
     isValidValue (value) {
       console.log('value', value)
       return value && (typeof value !== 'object')
+    },
+    onItemClicked () {
+      console.log('item clicked!!!')
     }
   },
   computed: {

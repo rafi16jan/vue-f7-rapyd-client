@@ -1,6 +1,14 @@
 <template>
   <!-- <f7-panel url='/panel/' left cover :opened="panelOpened"> -->
-  <f7-panel left cover>
+  <f7-panel
+    left
+    cover
+    :opened="panelOpened"
+    @panel:breakpoint="onPanelBreakpoint()"
+    @panel:opened="setPanelState(true)"
+    @panel:closed="setPanelState(false)"
+    @panel:backdrop-click="setPanelState(false)"
+    >
     <f7-view>
       <f7-page>
         <f7-navbar title="Menu" />
@@ -64,7 +72,7 @@ import {
   f7AccordionToggle,
   f7AccordionContent
 } from 'framework7-vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
@@ -93,6 +101,9 @@ export default {
       'checkAvailableUser',
       'getAppData',
       'checkClientJS'
+    ]),
+    ...mapState([
+      'panelOpened'
     ])
   },
   async mounted () {
@@ -139,6 +150,15 @@ export default {
         console.log(e)
         this.$f7.dialog.close()
       }
+    },
+    onPanelBreakpoint () {
+      const value = document.querySelector('.framework7-root').offsetWidth >= 768
+      console.log(value)
+      this.setPanelState(value)
+    },
+    setPanelState (value) {
+      console.log(`panelOpened state is ${value}`)
+      this.$store.commit('SET_PANEL_STATE', value)
     }
   }
 }

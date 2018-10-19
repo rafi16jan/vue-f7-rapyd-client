@@ -8,7 +8,8 @@ const LOGOUT = 'LOGOUT'
 
 const app = {
   state: {
-    data: {}
+    data: {},
+    panelOpened: false
   },
   getters: {
     getUser ({ data }) {
@@ -33,6 +34,10 @@ const app = {
     },
     checkClientJS ({ data }) {
       return data.client_js
+    },
+
+    getPanelOpenedState ({ panelOpened }) {
+      return panelOpened
     }
   },
   mutations: {
@@ -59,6 +64,10 @@ const app = {
     },
     [LOGOUT] (state) {
       state.data = { }
+    },
+
+    [`SET_PANEL_STATE`] (state, value) {
+      state.panelOpened = value
     }
   },
   actions: {

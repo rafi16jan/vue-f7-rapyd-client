@@ -2,15 +2,13 @@
     <f7-page>
         <!-- Top Navbar-->
         <f7-navbar>
-          <!-- <f7-nav-left>
+          <f7-nav-left>
             <f7-link
-              :panel-open="panelOpened"
-              :panel-close="!panelOpened"
-              @click="homeButtonClicked"
+              :panel-open="true"
             >
               <f7-icon if-ios="ion:ios-menu" if-md="ion:md-menu"></f7-icon>
             </f7-link>
-          </f7-nav-left> -->
+          </f7-nav-left>
           <f7-nav-title>Home</f7-nav-title>
         </f7-navbar>
         <f7-messagebar
@@ -40,6 +38,14 @@
       </f7-page>
 </template>
 
+<style scoped>
+@media (min-width: 768px) {
+  .view-main .navbar .left {
+    display: none;
+  }
+}
+</style>
+
 <script>
 import {
   f7Page,
@@ -54,8 +60,12 @@ import {
   f7Message
 } from 'framework7-vue'
 import { mapGetters } from 'vuex'
+import initStore from '@/vuex/plugin'
+
+const store = initStore()
 
 export default {
+  store,
   components: {
     f7Page,
     f7Navbar,
@@ -70,7 +80,6 @@ export default {
   },
   data () {
     return {
-      panelOpened: document.querySelector('.framework7-root').offsetWidth >= 768,
       chatText: '',
       messagesData: [{
         type: 'sent',
@@ -140,8 +149,9 @@ export default {
       })
     },
     homeButtonClicked () {
-      console.log('panel clicked!!!')
-      this.panelOpened = !this.panelOpened
+      // const value = !this.getPanelOpenedState
+      // console.log(value)
+      // this.$store.commit('SET_PANEL_STATE', value)
     },
     onChange (text) {
       console.log('changed')
