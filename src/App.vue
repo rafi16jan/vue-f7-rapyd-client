@@ -3,7 +3,7 @@
     <f7-statusbar />
     <f7-view
       url='/' main
-      :push-state='true'
+      :push-state='false'
       push-state-separator=''
     >
       <main-app />
