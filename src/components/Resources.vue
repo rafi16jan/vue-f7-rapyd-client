@@ -5,6 +5,8 @@
           :v-if="/*menu.model === 'res.partner'*/true"
           :loading="loading"
           :data="resourceValues"
+          :fields="fields"
+          :title="title"
         />
     </f7-page>
 </template>
@@ -33,20 +35,27 @@ export default {
     return {
       loading: false,
       resourceValues: [],
-      error: false
+      error: false,
+      fields: [],
+      title: 'List'
     }
   },
   async mounted () {
     this.loading = true
     try {
-      // let { models, tools } = await this.$createORM(this.getAppData, this.checkClientJS)
-      // console.log('models: ', models)
-      // console.log('model name: ', this.menu.model)
-      // console.log('tools: ', tools)
+      this.title = tools.view[this.menu.model].string
+      const tree = new DOMParser().parseFromString(window.tools.view[this.menu.model].tree, 'text/xml').children[0]
+      console.log('tree', tree)
+      for (let child of tree.children) {
+        let fieldName = child.attributes.name.value
+        console.log('fieldName', fieldName)
+        let field = models.env[this.menu.model]._fields[fieldName]
+        field.name = fieldName
+        console.log('field', field)
+        this.fields.push(field)
+      }
       let response = await models.env[this.menu.model].search()
       this.resourceValues = generateValues(response)
-      // this.resourceValues = await searchResourceData(this.menu.model, this.getAppData)
-      console.log('response: ', this.resourceValues)
       this.loading = false
     } catch (error) {
       console.log(error)

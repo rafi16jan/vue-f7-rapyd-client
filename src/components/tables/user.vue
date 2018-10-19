@@ -1,30 +1,26 @@
 <template>
     <div class="card data-table data-table-collapsible data-table-init">
-      <!-- <div class="card-header">
-        <div class="data-table-header">
-          <div class="data-table-title">Contacts</div>
-          <div class="data-table-actions">
-            <a href="#" class="link icon-only">
-              <i class="icon ion-ios-add-circle-outline ios-only"></i>
-              <i class="icon ion-md-add-circle-outline md-only"></i>
-            </a>
+      <div class="card-header">
+          <div class="data-table-title">
+            {{title}}
+            <f7-button fill raised text="Create" />
           </div>
-        </div>
-      </div> -->
+      </div>
       <div class="card-body">
         <table>
             <thead>
                 <tr>
-                  <!-- <th class="checkbox-cell">
+                  <th class="checkbox-cell">
                     <label class="checkbox">
-                      <input type="checkbox" value="false" @change="getAllContacts" />
-                      <i class="icon-checkbox"></i>
+                      <input type="checkbox"><i class="icon-checkbox" />
                     </label>
-                  </th> -->
-                  <th class="label-cell">Name</th>
-                  <th class="label-cell">Email</th>
-                  <th class="label-cell">Phone</th>
-                  <th class="label-cell">Actions</th>
+                  </th>
+                  <th class="label-cell"
+                    v-for="field in fields"
+                    :key="field.name"
+                  >
+                    {{field.string}}
+                  </th>
                 </tr>
             </thead>
             <tbody v-if="getContactSize">
@@ -35,10 +31,20 @@
                     <i class="icon-checkbox"></i>
                   </label>
                 </td> -->
-                <td class="label-cell" data-collapsible-title="Name">{{contact.name}}</td>
-                <td class="label-cell" data-collapsible-title="Email" >{{contact.email}}</td>
-                <td class="label-cell" data-collapsible-title="Phone">{{contact.phone}}</td>
-                <td class="data-table-actions" data-collapsible-title="Actions">
+                <td class="checkbox-cell">
+                  <label class="checkbox">
+                    <input type="checkbox"><i class="icon-checkbox"></i>
+                  </label>
+                </td>
+                <td class="label-cell"
+                  v-for="field in fields"
+                  :key="field.name"
+                  :data-collapsible-title="field.string"
+                  v-if="isValidValue(contact[field.name])"
+                >
+                  {{contact[field.name]}}
+                </td>
+                <!-- <td class="data-table-actions" data-collapsible-title="Actions">
                   <f7-link icon-only :href="`/contact/${contact.id}`" :data-contact="contact" >
                     <i class="icon ion-ios-create ios-only"></i>
                     <i class="icon ion-md-create md-only"></i>
@@ -47,11 +53,11 @@
                     <i class="icon ion-ios-trash ios-only"></i>
                     <i class="icon ion-md-trash md-only"></i>
                   </a>
-                </td>
+                </td> -->
               </tr>
             </tbody>
         </table>
-        <div class="data-table-footer">
+        <!-- <div class="data-table-footer">
           <div class="data-table-rows-select">
             Per page:
             <div class="input input-dropdown">
@@ -74,7 +80,7 @@
               <i class="icon icon-next color-gray"></i>
             </a>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 </template>
@@ -85,21 +91,48 @@
     width: 25%;
   }
 }
+
+.card-header {
+  min-height: 120px;
+}
+
+.card-header .data-table-title .button {
+  margin-top: 16px;
+}
 </style>
 
 <script>
+import {
+  f7Button
+} from 'framework7-vue'
+
 export default {
+  components: {
+    f7Button
+  },
   name: 'user-table',
   props: {
     contacts: {
       type: Array,
       default: () => []
+    },
+    fields: {
+      type: [Array, Object],
+      default: () => []
+    },
+    title: {
+      type: String,
+      default: () => ''
     }
   },
   data () {
     return {
       selectedContacts: []
     }
+  },
+  mounted () {
+    console.log('fields', this.fields)
+    console.log('contact', this.contacts)
   },
   methods: {
     getContactId ({ target }) {
@@ -132,11 +165,18 @@ export default {
       //   const index = this.contacts.indexOf(r)
       //   if (index !== -1) this.contacts.splice(index, 1)
       // })
+    },
+    isValidValue (value) {
+      console.log('value', value)
+      return value && (typeof value !== 'object')
     }
   },
   computed: {
     getContactSize () {
       return this.contacts.length
+    },
+    updateTitle () {
+      return this.title
     }
   }
 }

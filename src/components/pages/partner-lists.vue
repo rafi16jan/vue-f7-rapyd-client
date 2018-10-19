@@ -4,10 +4,9 @@
     <user-table
       v-if="!loading && (data.length > 0)"
       :contacts="data"
+      :fields="fields"
+      :title="title"
     />
-    <f7-fab position="right-bottom" slot="fixed">
-      <f7-icon md="ion-md-add" />
-    </f7-fab>
   </v-fragment>
 </template>
 
@@ -20,7 +19,6 @@
 <script>
 import {
   f7Preloader,
-  f7Fab,
   f7Icon
 } from 'framework7-vue'
 import { VFragment } from 'vue-fragments'
@@ -31,7 +29,6 @@ export default {
   name: 'partner-lists',
   components: {
     f7Preloader,
-    f7Fab,
     f7Icon,
     'v-fragment': VFragment,
     'user-table': UserTable
@@ -44,6 +41,14 @@ export default {
     data: {
       type: [Array, Object],
       default: () => []
+    },
+    fields: {
+      type: [Array, Object],
+      default: () => []
+    },
+    title: {
+      type: String,
+      default: () => ''
     }
   },
   computed: {
@@ -53,6 +58,12 @@ export default {
     },
     dataLists: () => {
       return this.data
+    },
+    updateFields: () => {
+      return this.fields
+    },
+    updateTitle: () => {
+      return this.title
     }
   },
   mounted () {
