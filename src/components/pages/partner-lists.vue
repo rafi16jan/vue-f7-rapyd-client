@@ -21,7 +21,7 @@ import {
   f7Preloader,
   f7Icon
 } from 'framework7-vue'
-import { VFragment } from 'vue-fragments'
+import { Fragment } from 'vue-fragment'
 
 import UserTable from '@/components/tables/user.vue'
 
@@ -30,7 +30,7 @@ export default {
   components: {
     f7Preloader,
     f7Icon,
-    'v-fragment': VFragment,
+    'v-fragment': Fragment,
     'user-table': UserTable
   },
   props: {
