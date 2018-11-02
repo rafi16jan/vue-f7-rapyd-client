@@ -72,6 +72,17 @@ const routes = [{
     )
     resolve({ component })
   }
+}, {
+  name: 'resource-form',
+  path: '/resources/:name/:type',
+  async async (_, __, resolve, ___) {
+    // dynamic import component; returns promise
+    const { default: component } = await import(
+      /* webpackChunkName: "resources" */
+      '@/components/ResourceForm.vue'
+    )
+    resolve({ component })
+  }
 // }, {
 //   name: 'edit-contact',
 //   path: '/contact/:id',

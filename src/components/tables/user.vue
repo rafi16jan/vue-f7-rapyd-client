@@ -3,7 +3,7 @@
       <div class="card-header">
           <div class="data-table-title">
             {{title}}
-            <f7-button fill raised text="Create" />
+            <f7-button fill raised text="Create" @click="loadResourceForm()" />
           </div>
       </div>
       <div class="card-body">
@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody v-if="getContactSize">
-              <tr v-for="contact in contacts" :key="contact.id" @click="onItemClicked">
+              <tr v-for="contact in contacts" :key="contact.id" @click="onItemClicked(contact)">
                 <!-- <td class="checkbox-cell">
                   <label class="checkbox">
                     <input type="checkbox" @change="getContactId" :data-id='contact.id' />
@@ -40,9 +40,8 @@
                   v-for="field in fields"
                   :key="field.name"
                   :data-collapsible-title="field.string"
-                  v-if="isValidValue(contact[field.name])"
                 >
-                  {{contact[field.name]}}
+                  {{contact[field.name] || ''}}
                 </td>
                 <!-- <td class="data-table-actions" data-collapsible-title="Actions">
                   <f7-link icon-only :href="`/contact/${contact.id}`" :data-contact="contact" >
@@ -174,8 +173,16 @@ export default {
       console.log('value', value)
       return value && (typeof value !== 'object')
     },
-    onItemClicked () {
-      console.log('item clicked!!!')
+    onItemClicked (item) {
+      this.loadResourceForm(item)
+    },
+    loadResourceForm (item) {
+      const name = this.title
+      const type = item ? 'update' : 'new'
+      const fields = this.fields
+      console.log('fields', fields)
+      const props = item ? { item, fields } : { fields }
+      this.$f7router.navigate({ name: 'resource-form', params: { name, type } }, { props })
     }
   },
   computed: {
