@@ -14,7 +14,7 @@
           @click="loadResourceForm()"
         />
       </f7-card-header>
-      <f7-card-body>
+      <f7-card-content>
         <f7-list :tablet-inset='true'>
           <f7-list-input
             v-for="field in fields"
@@ -22,7 +22,7 @@
             :label='field.string'
           />
         </f7-list>
-      </f7-card-body>
+      </f7-card-content>
     </f7-card>
   </f7-page>
 </template>
@@ -47,7 +47,7 @@ import {
   f7Navbar,
   f7Card,
   f7CardHeader,
-  f7CardBody,
+  f7CardContent,
   f7Button,
   f7Row,
   f7Col,
@@ -61,7 +61,7 @@ export default {
     f7Navbar,
     f7Card,
     f7CardHeader,
-    f7CardBody,
+    f7CardContent,
     f7Button,
     f7Row,
     f7Col,
