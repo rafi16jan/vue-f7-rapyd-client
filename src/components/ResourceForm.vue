@@ -11,14 +11,14 @@
           fill
           raised
           :text="headerButtonTitle"
-          @click="loadResourceForm()"
+          @click="handleHeaderButton()"
         />
       </f7-card-header>
       <f7-card-content>
         <f7-list :tablet-inset='true'>
           <f7-list-input
             v-for="field in fields"
-            :key='`resource-form-${field.id}`'
+            :key='`resource-form-${field.name}`'
             :label='field.string'
           />
         </f7-list>
@@ -81,6 +81,8 @@ export default {
     },
     getHeaderTitle () {
       return `/ ${this.getResourceName()}`
+    },
+    handleHeaderButton () {
     }
   }
 }
