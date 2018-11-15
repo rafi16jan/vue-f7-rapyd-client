@@ -7,6 +7,7 @@
           :data="resourceValues"
           :fields="fields"
           :title="title"
+          :model="menu.model"
         />
     </f7-page>
 </template>

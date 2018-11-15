@@ -6,6 +6,7 @@
       :contacts="data"
       :fields="fields"
       :title="title"
+      :model="model"
     />
   </v-fragment>
 </template>
@@ -47,6 +48,10 @@ export default {
       default: () => []
     },
     title: {
+      type: String,
+      default: () => ''
+    },
+    model: {
       type: String,
       default: () => ''
     }
