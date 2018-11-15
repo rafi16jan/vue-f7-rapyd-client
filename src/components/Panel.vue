@@ -11,7 +11,7 @@
     >
     <f7-view>
       <f7-page>
-        <f7-navbar title="Menu" />
+        <f7-navbar :title="title" />
         <f7-list>
           <f7-list-item
             view='.view-main'
@@ -59,6 +59,14 @@
   </f7-panel>
 </template>
 
+<style scoped>
+.panel-left {
+  border: none;
+  border-radius: 0;
+  border-right: 1px #d1d1d1 solid !important;
+}
+</style>
+
 <script>
 import {
   f7Panel,
@@ -93,6 +101,7 @@ export default {
       //   title: 'Contacts',
       //   link: '/contacts/'
       // }],
+      title: '',
       panelMenus: []
     }
   },
@@ -108,8 +117,7 @@ export default {
   },
   async mounted () {
     try {
-      // let { tools } = await this.$createORM(this.getAppData, this.checkClientJS)
-      // sort panel menu sequence using rapydscript syntax
+      this.title = this.isTabletOrDesktop() ? 'Home' : 'Menu'
       let menus = tools.keys(tools.menu, 'sequence').as_array()
       this.panelMenus = menus.map(key => tools.menu[key])
       console.log(this.$f7.views)
@@ -118,6 +126,9 @@ export default {
     }
   },
   methods: {
+    isTabletOrDesktop () {
+      return document.querySelector('.framework7-root').offsetWidth >= 768
+    },
     getMenuChild (menu) {
       return menu.childs.length > 0
     },
