@@ -7,6 +7,7 @@
           :data="resourceValues"
           :fields="fields"
           :title="title"
+          :model="menu.model"
         />
     </f7-page>
 </template>
@@ -22,6 +23,7 @@ import PartnerLists from './pages/partner-lists.vue'
 import { mapGetters } from 'vuex'
 
 import { generateValues } from '@/utils/create-orm-function'
+import { getResourcesFields } from '@/utils/convert-data-types/xml-to-object'
 
 export default {
   props: [ 'menu' ],
@@ -44,16 +46,18 @@ export default {
     this.loading = true
     try {
       this.title = tools.view[this.menu.model].string
-      const tree = new DOMParser().parseFromString(window.tools.view[this.menu.model].tree, 'text/xml').children[0]
-      console.log('tree', tree)
-      for (let child of tree.children) {
-        let fieldName = child.attributes.name.value
-        console.log('fieldName', fieldName)
-        let field = models.env[this.menu.model]._fields[fieldName]
-        field.name = fieldName
-        console.log('field', field)
-        this.fields.push(field)
-      }
+      // const tree = new DOMParser().parseFromString(window.tools.view[this.menu.model].tree, 'text/xml').children[0]
+      this.fields = await getResourcesFields(tools.view[this.menu.model].tree, this.menu.model)
+      console.log('tree', this.fields)
+      // console.log('anotherTree', anotherTree)
+      // for (let child of tree.children) {
+      //   let fieldName = child.attributes.name.value
+      //   console.log('fieldName', fieldName)
+      //   let field = models.env[this.menu.model]._fields[fieldName]
+      //   field.name = fieldName
+      //   console.log('field', field)
+      //   this.fields.push(field)
+      // }
       let response = await models.env[this.menu.model].search()
       this.resourceValues = generateValues(response)
       this.loading = false

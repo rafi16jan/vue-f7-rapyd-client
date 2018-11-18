@@ -9,7 +9,7 @@
               <f7-icon if-ios="ion:ios-menu" if-md="ion:md-menu"></f7-icon>
             </f7-link>
           </f7-nav-left>
-          <f7-nav-title>Home</f7-nav-title>
+          <f7-nav-title v-text="title" />
         </f7-navbar>
         <f7-messagebar
             ref='messagebar'
@@ -80,6 +80,7 @@ export default {
   },
   data () {
     return {
+      title: '',
       chatText: '',
       messagesData: [{
         type: 'sent',
@@ -107,17 +108,22 @@ export default {
       this.$createORM(this.getAppData, this.checkClientJS)
       const self = this
       self.$f7ready(() => {
-        // self.$f7.panel.create({ side: 'left', effect: 'reveal' })
-        console.log('loggedIn panel: ', self.$f7.panel)
-        if (!self.$f7.panel.left) self.$f7router.navigate({ name: 'panel' })
-        self.$f7.panel.enableSwipe('left')
-        // document.querySelector('.panel-backdrop').style.display = 'block'
-        if (this.isTabletOrDesktop()) {
-          document.querySelector('.panel').style.display = 'block'
-          document.querySelector('.view.view-main').style.marginLeft = '260px'
+        const { name } = self.$f7.views.main.router.currentRoute
+        if (name === 'home') {
+          // self.$f7.panel.create({ side: 'left', effect: 'reveal' })
+          console.log('loggedIn panel: ', self.$f7.panel)
+          if (!self.$f7.panel.left) self.$f7router.navigate({ name: 'panel' })
+          self.$f7.panel.enableSwipe('left')
+          // document.querySelector('.panel-backdrop').style.display = 'block'
+          if (this.isTabletOrDesktop()) {
+            document.querySelector('.panel').style.display = 'block'
+            document.querySelector('.view.view-main').style.marginLeft = '260px'
+          } else {
+            self.title = 'Home'
+          }
+          self.messagebar = self.$refs.messagebar.f7Messagebar
+          self.messages = self.$refs.messages.f7Messages
         }
-        self.messagebar = self.$refs.messagebar.f7Messagebar
-        self.messages = self.$refs.messages.f7Messages
       })
     } catch (error) {
       console.error('error: ', (error))

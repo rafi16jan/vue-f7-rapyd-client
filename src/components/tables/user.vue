@@ -126,6 +126,10 @@ export default {
     title: {
       type: String,
       default: () => ''
+    },
+    model: {
+      type: String,
+      default: () => ''
     }
   },
   data () {
@@ -177,11 +181,12 @@ export default {
       this.loadResourceForm(item)
     },
     loadResourceForm (item) {
-      const name = this.title
+      const { title: name, fields, model } = this
+      // const name = this.title
       const type = item ? 'update' : 'new'
-      const fields = this.fields
+      // const fields = this.fields
       console.log('fields', fields)
-      const props = item ? { item, fields } : { fields }
+      const props = item ? { item, fields, model } : { fields, model }
       this.$f7router.navigate({ name: 'resource-form', params: { name, type } }, { props })
     }
   },
